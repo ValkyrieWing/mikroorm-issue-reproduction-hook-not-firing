@@ -44,11 +44,18 @@ afterAll(async () => {
   await orm.close(true);
 });
 
-test("basic CRUD example", async () => {
+test("after persist", async () => {
   const em = orm.em.fork();
   const userEntity = new User("name", "email");
   em.persist(userEntity);
   expect(userEntity.name).toBe("beforeupdate fired");
+  await em.flush();
+});
+
+test("after flush", async () => {
+  const em = orm.em.fork();
+  const userEntity = new User("name", "email");
+  em.persist(userEntity);
   await em.flush();
   expect(userEntity.name).toBe("beforeupdate fired");
 });
